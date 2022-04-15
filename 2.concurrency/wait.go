@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"sync"
+	"time"
 )
 
 // WaitGroup 一个异步结构体
@@ -42,4 +44,19 @@ LOOP:
 // Wait 等待
 func (ap *WaitGroup) Wait() {
 	ap.wg.Wait()
+}
+
+func main() {
+	work := NewPool(4)
+	for i := 0; i < 50; i++ {
+		work.Add(1)
+		test(i, work)
+	}
+}
+
+func test(i int, wg *WaitGroup) {
+	defer wg.Done()
+	fmt.Println(time.Now(), "", i)
+	time.Sleep(1 * time.Second)
+	fmt.Println(time.Now(), "", i)
 }
