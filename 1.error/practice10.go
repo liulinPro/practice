@@ -6,6 +6,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	xerror "github.com/pkg/errors"
 )
 
 type QueryError struct {
@@ -24,6 +25,9 @@ var qe = &QueryError{
 func main() {
 	err := fmt.Errorf("hello %w", qe)
 	if errors.Is(err, qe) {
+		fmt.Println(err)
+	}
+	if xerror.Is(err, qe) {
 		fmt.Println(err)
 	}
 	q := new(QueryError)

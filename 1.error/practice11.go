@@ -11,7 +11,7 @@ import (
 func main() {
 	err := errors.New("cxq")
 	//error1 := fmt.Errorf("name not fount %v", err)
-	error1 := fmt.Errorf("name not fount %2", err)
+	error1 := fmt.Errorf("name not fount %w", err)
 	if errors.Is(error1, err) {
 		fmt.Println(error1.Error())
 	}
