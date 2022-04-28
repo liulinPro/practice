@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-	ch := make(chan int)
-	//ch := make(chan int,4)
+	//ch := make(chan int)
+	ch := make(chan int, 4)
 	for i := 0; i < 5; i++ {
 		go func(v int) {
 			ch <- v

@@ -4,7 +4,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"math"
 	"net/http"
 	_ "net/http/pprof"
@@ -16,16 +16,23 @@ import (
 func main() {
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		var wg sync.WaitGroup
-		for i := 0; i < math.MaxInt32; i++ {
-			wg.Add(1) //能控制goroutine和数量
+		c := make(chan struct{}, 3)
+		for i := 0; i < math.MaxInt64; i++ {
+			wg.Add(1)
+			c <- struct{}{} //能控制
 			go func(i int) {
-				//wg.Add(1)/不能控制goroutine和数量，只能控制运行数目
+				//c <- struct{}{}
 				defer wg.Done()
-				fmt.Println(i)
+				log.Println(i)
 				time.Sleep(time.Second)
+				<-c
 			}(i)
+
 		}
 		wg.Wait()
 	})
-	http.ListenAndServe(":8080", nil)
+	go func() {
+		http.ListenAndServe(":8080", nil)
+	}()
+	select {}
 }
