@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 func gen(nums ...int) <-chan int {
@@ -66,5 +67,31 @@ func main() {
 	// Consume the merged output from c1 and c2.
 	for n := range merge(c1, c2) {
 		fmt.Println(n) // 4 then 9, or 9 then 4
+	}
+}
+
+func WaitUntilTrueOrMaxTries(maxTries int, wait time.Duration, f func() bool) bool {
+	for try := 0; try < maxTries; try++ {
+		if ok := f(); ok {
+			return true
+		}
+		time.Sleep(wait)
+		wait *= 2
+	}
+	return false
+}
+
+func WaitUntilTrueOrTimeout(timeout, wait time.Duration, f func() bool) bool {
+	out := time.NewTimer(timeout)
+	for {
+		select {
+		case <-out.C:
+			return false
+		default:
+			if ok := f(); ok {
+				return true
+			}
+			time.Sleep(wait)
+		}
 	}
 }
