@@ -4,15 +4,22 @@
 package main
 
 import (
-	"net/http"
-	"net/url"
-	"strings"
+	"time"
 )
 
 func main() {
-	//var values url.Values
-	values := make(url.Values)
-	values.Add("sdafas", "")
-	_, _ = http.Post("http://winch.wptqc.com/api/message/jd", "application/json; charset=utf-8", strings.NewReader(values.Encode()))
-
+	//var mu sync.Mutex
+	//go func() {
+	//	fmt.Println("等待锁")
+	//	mu.Lock()
+	//	time.Sleep(3 * time.Second)
+	//	fmt.Println("cxq")
+	//	mu.Unlock()
+	//}()
+	//
+	//mu.Lock()
+	//time.Sleep(3 * time.Second)
+	//fmt.Println("liulin")
+	//mu.Unlock()
+	time.Sleep(10 * time.Second)
 }
